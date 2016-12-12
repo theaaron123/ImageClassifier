@@ -14,7 +14,8 @@ public class Main {
         imageClassifier.calculateImageColourComplexity("image425.jpg");
         imageClassifier.calculateImageColourComplexity("image1490.jpg");
         imageClassifier.gaussianBlurImage("image1490.jpg");
-        BufferedImage buff = imageClassifier.imageToGrayScale("image1491.jpg");
+        BufferedImage buff = imageClassifier.imageToGrayScale("image.jpg");
         ImageClassifier.writeImage("gray.jpg", buff);
+        imageClassifier.sobelImage("gray.jpg");
     }
 }

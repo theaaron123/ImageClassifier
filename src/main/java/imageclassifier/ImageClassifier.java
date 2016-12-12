@@ -89,6 +89,19 @@ public class ImageClassifier {
         }
     }
 
+    public void sobelImage(String path) {
+        BufferedImage image = getBufferedImage(path);
+        BufferedImage output = deepCopy(image);
+        KernelConvolutions kernelConvolutions = new KernelConvolutions();
+        BufferedImage b = kernelConvolutions.sobelOperator(image, output);
+        File outputFile = new File("sobel.jpg");
+        try {
+            ImageIO.write(b, "jpg", outputFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public BufferedImage imageToGrayScale(String path) {
         BufferedImage image = getBufferedImage(path);
         BufferedImage output = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
