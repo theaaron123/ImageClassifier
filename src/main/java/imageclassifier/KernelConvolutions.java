@@ -105,20 +105,17 @@ public class KernelConvolutions {
         for (int y = 0; y < originalImage.getHeight(); y++) {
             for (int x = 0; x < originalImage.getWidth(); x++) {
                 int index = y * originalImage.getWidth() + x;
-
                 int j = Color.HSBtoRGB((float) orientation[index], 0, (float) (magnitude[index] / max));
-
                 out[index] = j;
-
             }
         }
 
         try {
-            getImageFromArray("test1.jpg", out, originalImage.getWidth(), originalImage.getHeight());
+            BufferedImage output = getImageFromArray("test1.jpg", out, originalImage.getWidth(), originalImage.getHeight());
+            return output;
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
