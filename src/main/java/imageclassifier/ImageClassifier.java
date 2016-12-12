@@ -3,6 +3,9 @@ package imageclassifier;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -71,5 +74,42 @@ public class ImageClassifier {
             }
         }
         System.out.println("size: " + colours.size());
+    }
+
+    public void gaussianBlurImage(String path) {
+        BufferedImage image = getBufferedImage(path);
+        BufferedImage output = deepCopy(image);
+        KernelConvolutions kernelConvolutions = new KernelConvolutions();
+        BufferedImage b = kernelConvolutions.gaussianBlur(image, output);
+        File outputFile = new File("image.jpg");
+        try {
+            ImageIO.write(b, "jpg", outputFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public BufferedImage imageToGrayScale(String path) {
+        BufferedImage image = getBufferedImage(path);
+        BufferedImage output = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+        ColorConvertOp operator = new ColorConvertOp(image.getColorModel().getColorSpace(), output.getColorModel().getColorSpace(), null);
+        operator.filter(image, output);
+        return output;
+    }
+
+    static void writeImage(String name, BufferedImage image) {
+        File outputFile = new File(name);
+        try {
+            ImageIO.write(image, "jpg", outputFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static BufferedImage deepCopy(BufferedImage bi) {
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPreMultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(null);
+        return new BufferedImage(cm, raster, isAlphaPreMultiplied, null);
     }
 }
