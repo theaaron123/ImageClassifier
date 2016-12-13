@@ -56,7 +56,7 @@ public class KernelConvolutions {
         return sobelImage;
     }
 
-    public BufferedImage sobelOperatorReal(BufferedImage originalImage) {
+    public double[][] sobelOperatorReal(BufferedImage originalImage) {
 
         int[] grayData = new int[originalImage.getWidth() * originalImage.getHeight()];
 
@@ -91,15 +91,13 @@ public class KernelConvolutions {
                 orientation[index] = Math.atan2(dy, dx) + Math.PI;
             }
         }
+        double[][] magOrien = new double[2][];
+        magOrien[0] = magnitude;
+        magOrien[1] = orientation;
+        return magOrien;
+    }
 
-        double count = 0;
-        for (double d : magnitude) {
-            if (d != 0) {
-                count++;
-            }
-        }
-        System.out.println("count is " + count + " " + count / magnitude.length);
-
+    public static BufferedImage imageFromMagnitudeOrientation(double[] magnitude, double[] orientation, int width, int height) {
         List<Double> list = new ArrayList<Double>();
         for (int i = 0; i < magnitude.length; i++) {
             list.add(magnitude[i]);
@@ -108,21 +106,32 @@ public class KernelConvolutions {
 
         int[] out = new int[magnitude.length];
 
-        for (int y = 0; y < originalImage.getHeight(); y++) {
-            for (int x = 0; x < originalImage.getWidth(); x++) {
-                int index = y * originalImage.getWidth() + x;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int index = y * width + x;
                 int rgb = Color.HSBtoRGB((float) orientation[index], 0, (float) (magnitude[index] / max));
                 out[index] = rgb;
             }
         }
 
         try {
-            BufferedImage output = getImageFromArray("test1.jpg", out, originalImage.getWidth(), originalImage.getHeight());
+            BufferedImage output = getImageFromArray("test1.jpg", out, width, height);
             return output;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public double magnitudeWhiteCount(double[] magnitude) {
+        double count = 0;
+        for (double d : magnitude) {
+            if (d != 0) {
+                count++;
+            }
+        }
+        System.out.println("count is " + count + " " + count / magnitude.length);
+        return count;
     }
 
     public static BufferedImage getImageFromArray(String filename, int pixels[], int width, int height) throws IOException {
