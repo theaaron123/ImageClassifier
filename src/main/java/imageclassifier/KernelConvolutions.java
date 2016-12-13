@@ -1,7 +1,6 @@
 package imageclassifier;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.FileOutputStream;
@@ -88,13 +87,20 @@ public class KernelConvolutions {
                 double dx = buffer[2] + 2 * buffer[5] + buffer[8] - buffer[0] - 2 * buffer[3] - buffer[6];
                 double dy = buffer[6] + 2 * buffer[7] + buffer[8] - buffer[0] - 2 * buffer[1] - buffer[2];
 
-                magnitude[index] = Math.sqrt((dx * dx) + (dy * dy)) / 1141.0;
+                magnitude[index] = Math.sqrt((dx * dx) + (dy * dy)) / 1143.0;
                 orientation[index] = Math.atan2(dy, dx) + Math.PI;
             }
         }
 
-        List<Double> list;
-        list = new ArrayList<Double>();
+        double count = 0;
+        for (double d : magnitude) {
+            if (d != 0) {
+                count++;
+            }
+        }
+        System.out.println("count is " + count + " " + count / magnitude.length);
+
+        List<Double> list = new ArrayList<Double>();
         for (int i = 0; i < magnitude.length; i++) {
             list.add(magnitude[i]);
         }
@@ -105,8 +111,8 @@ public class KernelConvolutions {
         for (int y = 0; y < originalImage.getHeight(); y++) {
             for (int x = 0; x < originalImage.getWidth(); x++) {
                 int index = y * originalImage.getWidth() + x;
-                int j = Color.HSBtoRGB((float) orientation[index], 0, (float) (magnitude[index] / max));
-                out[index] = j;
+                int rgb = Color.HSBtoRGB((float) orientation[index], 0, (float) (magnitude[index] / max));
+                out[index] = rgb;
             }
         }
 

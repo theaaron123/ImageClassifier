@@ -76,34 +76,44 @@ public class ImageClassifier {
         System.out.println("size: " + colours.size());
     }
 
-    public void gaussianBlurImage(String path) {
+    public BufferedImage gaussianBlurImage(String path) {
         BufferedImage image = getBufferedImage(path);
         BufferedImage output = deepCopy(image);
         KernelConvolutions kernelConvolutions = new KernelConvolutions();
-        BufferedImage b = kernelConvolutions.gaussianBlur(image, output);
-        File outputFile = new File("image.jpg");
-        try {
-            ImageIO.write(b, "jpg", outputFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return kernelConvolutions.gaussianBlur(image, output);
     }
 
-    public void sobelImage(String path) {
+    public BufferedImage gaussianBlurImage(BufferedImage bufferedImage) {
+        BufferedImage image = bufferedImage;
+        BufferedImage output = deepCopy(image);
+        KernelConvolutions kernelConvolutions = new KernelConvolutions();
+        return kernelConvolutions.gaussianBlur(image, output);
+    }
+
+    public BufferedImage sobelImage(String path) {
         BufferedImage image = getBufferedImage(path);
         BufferedImage output = deepCopy(image);
         KernelConvolutions kernelConvolutions = new KernelConvolutions();
-        BufferedImage b = kernelConvolutions.sobelOperator(image, output);
-        File outputFile = new File("sobel.jpg");
-        try {
-            ImageIO.write(b, "jpg", outputFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return kernelConvolutions.sobelOperator(image, output);
+    }
+
+    public BufferedImage sobelImage(BufferedImage bufferedImage) {
+        BufferedImage image = bufferedImage;
+        BufferedImage output = deepCopy(image);
+        KernelConvolutions kernelConvolutions = new KernelConvolutions();
+        return kernelConvolutions.sobelOperator(image, output);
     }
 
     public BufferedImage imageToGrayScale(String path) {
         BufferedImage image = getBufferedImage(path);
+        BufferedImage output = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+        ColorConvertOp operator = new ColorConvertOp(image.getColorModel().getColorSpace(), output.getColorModel().getColorSpace(), null);
+        operator.filter(image, output);
+        return output;
+    }
+
+    public BufferedImage imageToGrayScale(BufferedImage bufferedImage) {
+        BufferedImage image = bufferedImage;
         BufferedImage output = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
         ColorConvertOp operator = new ColorConvertOp(image.getColorModel().getColorSpace(), output.getColorModel().getColorSpace(), null);
         operator.filter(image, output);
