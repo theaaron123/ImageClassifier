@@ -1,11 +1,8 @@
 package imageclassifier;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 /**
  * Created by aaron on 13/11/16.
