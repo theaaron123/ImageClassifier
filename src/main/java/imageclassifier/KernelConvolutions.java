@@ -91,13 +91,18 @@ public class KernelConvolutions {
                 orientation[index] = Math.atan2(dy, dx) + Math.PI;
             }
         }
-        double[][] magOrien = new double[2][];
+
+        double[] widthHeight = new double[2];
+        widthHeight[0] = originalImage.getWidth();
+        widthHeight[1] = originalImage.getHeight();
+        double[][] magOrien = new double[3][];
         magOrien[0] = magnitude;
         magOrien[1] = orientation;
+        magOrien[2] = widthHeight;
         return magOrien;
     }
 
-    public static BufferedImage imageFromMagnitudeOrientation(double[] magnitude, double[] orientation, int width, int height) {
+    public BufferedImage imageFromMagnitudeOrientation(double[] magnitude, double[] orientation, int width, int height) {
         List<Double> list = new ArrayList<Double>();
         for (int i = 0; i < magnitude.length; i++) {
             list.add(magnitude[i]);
@@ -123,15 +128,14 @@ public class KernelConvolutions {
         return null;
     }
 
-    public double magnitudeWhiteCount(double[] magnitude) {
+    public double magnitudeWhiteCountRatio(double[] magnitude) {
         double count = 0;
         for (double d : magnitude) {
             if (d != 0) {
                 count++;
             }
         }
-        System.out.println("count is " + count + " " + count / magnitude.length);
-        return count;
+        return count / magnitude.length;
     }
 
     public static BufferedImage getImageFromArray(String filename, int pixels[], int width, int height) throws IOException {

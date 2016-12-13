@@ -48,6 +48,16 @@ public class ImageClassifier {
         return null;
     }
 
+    public BufferedImage getBufferedImage(File file) {
+        try {
+            BufferedImage image = ImageIO.read(file);
+            return image;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public int getPixelRGB(BufferedImage image, int x, int y) {
         return image.getRGB(x, y);
     }
@@ -99,9 +109,15 @@ public class ImageClassifier {
 
     public BufferedImage sobelImage(BufferedImage bufferedImage) {
         BufferedImage image = bufferedImage;
-        BufferedImage output = deepCopy(image);
         KernelConvolutions kernelConvolutions = new KernelConvolutions();
-        return kernelConvolutions.sobelOperator(image, output);
+        double[][] sobelOperatorReal = kernelConvolutions.sobelOperatorReal(image);
+        return kernelConvolutions.imageFromMagnitudeOrientation(sobelOperatorReal[0], sobelOperatorReal[1], (int) sobelOperatorReal[2][0], (int) sobelOperatorReal[2][1]);
+    }
+
+    public double sobelImageWhiteCountRatio(BufferedImage bufferedImage) {
+        KernelConvolutions kernelConvolutions = new KernelConvolutions();
+        double[][] sobelOperatorReal = kernelConvolutions.sobelOperatorReal(bufferedImage);
+        return kernelConvolutions.magnitudeWhiteCountRatio(sobelOperatorReal[0]);
     }
 
     public BufferedImage imageToGrayScale(String path) {
